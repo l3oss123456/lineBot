@@ -36,7 +36,7 @@ function handleEvent(event) {
 function handleMessageEvent(event) {
   var msg = {
     type: "text",
-    text: "สวัสดีครับ",
+    text: "สวัสดีนะครับ",
   };
 
   return client.replyMessage(event.replyToken, msg);
