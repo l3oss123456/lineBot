@@ -99,13 +99,21 @@ app.post("/webhook", line.middleware(config), (req, res) => {
 });
 
 function handleMessageEvent(event) {
+  const fixer = request.get(
+    {
+      url: `http://data.fixer.io/api/latest?access_key=${process.env.fixerApiKey}`,
+    },
+    (err, res, body) => {
+      console.log("status = " + res.statusCode);
+    }
+  );
   // var msg = {
   //   type: "text",
   //   text: "สวัสดีนะครับ",
   // };
   var msg = {
-    // type: "text",
-    text: event.message.text,
+    type: "text",
+    text: event.message.text + ": " + fixer.rates.USB,
   };
 
   return client.replyMessage(event.replyToken, msg);
