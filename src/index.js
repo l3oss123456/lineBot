@@ -16,6 +16,15 @@ app.get('*', (req, res) => {
   })
 })
 
+app.post("/webhook", line.middleware(config), (req, res) => {
+  // Promise.all(req.body.events.map(handleEvent)).then((result) =>
+  //   res.json(result)
+  // );
+  res.json({
+    message: 'Welcome to Nongbot/webhook'
+  })
+});
+
 app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`)
 })
