@@ -86,27 +86,27 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", line.middleware(config), (req, res) => {
-  // Promise.all(req.body.events.map(handleEvent)).then((result) =>
-  //   res.json(result)
-  // );
+  Promise.all(req.body.events.map(handleEvent)).then((result) =>
+    res.json(result)
+  );
 });
 
-// function handleEvent(event) {
-//   if (event.type === "message" && event.message.type === "text") {
-//     handleMessageEvent(event);
-//   } else {
-//     return Promise.resolve(null);
-//   }
-// }
+function handleEvent(event) {
+  if (event.type === "message" && event.message.type === "text") {
+    handleMessageEvent(event);
+  } else {
+    return Promise.resolve(null);
+  }
+}
 
-// function handleMessageEvent(event) {
-//   var msg = {
-//     type: "text",
-//     text: "สวัสดีนะครับ",
-//   };
+function handleMessageEvent(event) {
+  var msg = {
+    type: "text",
+    text: "สวัสดีนะครับ",
+  };
 
-//   return client.replyMessage(event.replyToken, msg);
-// }
+  return client.replyMessage(event.replyToken, msg);
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on port : ${PORT}`);
