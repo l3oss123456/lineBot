@@ -1,65 +1,104 @@
+// const express = require("express");
+// const line = require("@line/bot-sdk");
+// const bodyParser = require('body-parser')
+// const request = require('request')
+// require("dotenv/config");
+// const app = express();
+
+// const PORT = process.env.PORT || 4000;
+// app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
+
+// // const client = new line.Client({
+// //   channelAccessToken: process.env.channelAccessToken
+// // });
+
+// app.get("/", (req, res) => {
+//   res.json({
+//     message: "Welcome to Nongbot",
+//   });
+// });
+
+// app.post("/webhook", (req, res) => {
+//   let reply_token = req.body.events[0].replyToken;
+//   reply(reply_token);
+//   res.sendStatus(200);
+// });
+
+// function reply(reply_token) {
+//   let headers = {
+//     "Content-Type": "application/json",
+//     Authorization: `Bearer ${process.env.channelAccessToken}`,
+//   };
+//   let body = JSON.stringify({
+//     replyToken: reply_token,
+//     messages: [
+//       {
+//         type: "text",
+//         text: "Hello",
+//       },
+//       {
+//         type: "text",
+//         text: "How are you?",
+//       },
+//     ],
+//   });
+//   request.post(
+//     {
+//       url: "https://api.line.me/v2/bot/message/reply",
+//       headers: headers,
+//       body: body,
+//     },
+//     (err, res, body) => {
+//       console.log("status = " + res.statusCode);
+//     }
+//   );
+// }
+
+// app.listen(PORT, () => {
+//   console.log(`Server is listening on ${PORT}`);
+// });
+
+// module.exports = app
+
 const express = require("express");
 const line = require("@line/bot-sdk");
-const bodyParser = require('body-parser')
-const request = require('request')
 require("dotenv/config");
+
 const app = express();
+// const config = require("./config")
 
-const PORT = process.env.PORT || 4000;
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+const PORT = 4800;
 
-// const client = new line.Client({
-//   channelAccessToken: process.env.channelAccessToken
-// });
+const client = new line.Client({
+  channelAccessToken: `${process.env.channelAccessToken}`,
+});
+
+const message = {
+  type: "text",
+  text: "Hello World!",
+};
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Welcome to Nongbot",
+    message: "Welcome to nongBot",
   });
 });
 
 app.post("/webhook", (req, res) => {
   let reply_token = req.body.events[0].replyToken;
-  reply(reply_token);
-  res.sendStatus(200);
-});
+  client.pushMessage(reply_token, message).then(() => {
 
-function reply(reply_token) {
-  let headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${process.env.channelAccessToken}`,
-  };
-  let body = JSON.stringify({
-    replyToken: reply_token,
-    messages: [
-      {
-        type: "text",
-        text: "Hello",
-      },
-      {
-        type: "text",
-        text: "How are you?",
-      },
-    ],
-  });
-  request.post(
-    {
-      url: "https://api.line.me/v2/bot/message/reply",
-      headers: headers,
-      body: body,
-    },
-    (err, res, body) => {
-      console.log("status = " + res.statusCode);
-    }
-  );
-}
+  }).catch((err) => {
+    console.log('err: ', err)
+  })
+});
 
 app.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT}`);
+  console.log(`Server is running on port : ${PORT}`);
 });
 
-module.exports = app
+module.exports = app;
 
 // const express = require("express");
 // const line = require("@line/bot-sdk");
