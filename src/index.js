@@ -29,7 +29,7 @@ app.post("/webhook", (req, res) => {
 function reply(reply_token) {
   let headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer {xxxxxxx}",
+    Authorization: `Bearer ${process.env.channelAccessToken}`,
   };
   let body = JSON.stringify({
     replyToken: reply_token,
