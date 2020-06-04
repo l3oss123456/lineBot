@@ -1,9 +1,13 @@
 const express = require("express");
 const line = require("@line/bot-sdk");
+const bodyParser = require('body-parser')
+const request = require('request')
 require("dotenv/config");
 const app = express();
 
 const PORT = process.env.PORT || 4000;
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // const client = new line.Client({
 //   channelAccessToken: process.env.channelAccessToken
