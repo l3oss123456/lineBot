@@ -97,21 +97,13 @@ app.post("/webhook", line.middleware(config), (req, res) => {
   ).then((result) => res.json(result));
 });
 
-function handleEvent(event) {
-  if (event.type === "message" && event.message.type === "text") {
-    handleMessageEvent(event);
-  } else {
-    return Promise.resolve(null);
-  }
-}
-
 function handleMessageEvent(event) {
   var msg = {
     type: "text",
     text: "สวัสดีนะครับ",
   };
 
-  return client.replyMessage(event.replyToken, msg);
+  return client.replyMessage(event.replyToken, event.message.text);
 }
 
 app.listen(PORT, () => {
