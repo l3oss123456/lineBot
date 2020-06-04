@@ -5,9 +5,14 @@ const app = express()
 
 const PORT = process.env.PORT || 4000
 
-const client = new line.Client({
-  channelAccessToken: process.env.channelAccessToken
-});
+// const client = new line.Client({
+//   channelAccessToken: process.env.channelAccessToken
+// });
+
+const config = {
+  channelAccessToken: process.env.channelAccessToken,
+  channelSecret: process.env.channelSecret
+};
 
 app.get('/', (req, res) => {
   res.json({
@@ -15,38 +20,37 @@ app.get('/', (req, res) => {
   })
 })
 
-// app.get('*', (req, res) => {
-//   res.json({
-//     message: 'Error'
-//   })
-// })
-
-app.post("/webhook", (req, res) => {
-  res.json(req)
-  // Promise.all(req.body.events.map(handleEvent)).then((result) =>
-  //   res.json(result)
-  // );
-  // res.json({
-  //   message: 'Welcome to Nongbot/webhook'
-  // })
+app.post('/webhook', line.middleware(config), (req, res) => {
+  Promise
+      .all(req.body.events.map(handleEvent))
+      .then((result) => res.json(result));
 });
 
-// function handleEvent(event) {
-//   if (event.type === "message" && event.message.type === "text") {
-//     handleMessageEvent(event);
-//   } else {
-//     return Promise.resolve(null);
-//   }
-// }
+// app.post("/webhook", (req, res) => {
+//   // Promise.all(req.body.events.map(handleEvent)).then((result) =>
+//   //   res.json(result)
+//   // );
+//   // res.json({
+//   //   message: 'Welcome to Nongbot/webhook'
+//   // })
+// });
 
-// function handleMessageEvent(event) {
-//   var msg = {
-//     type: "text",
-//     text: "สวัสดีนะครับ",
-//   };
+function handleEvent(event) {
+  if (event.type === "message" && event.message.type === "text") {
+    handleMessageEvent(event);
+  } else {
+    return Promise.resolve(null);
+  }
+}
 
-//   return client.replyMessage(event.replyToken, msg);
-// }
+function handleMessageEvent(event) {
+  var msg = {
+    type: "text",
+    text: "สวัสดีนะครับ",
+  };
+
+  return client.replyMessage(event.replyToken, msg);
+}
 
 app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`)
