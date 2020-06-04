@@ -10,11 +10,11 @@ app.get('/', (req, res) => {
   })
 })
 
-app.get('*', (req, res) => {
-  res.json({
-    message: 'Error'
-  })
-})
+// app.get('*', (req, res) => {
+//   res.json({
+//     message: 'Error'
+//   })
+// })
 
 app.post("/webhook", (req, res) => {
   // Promise.all(req.body.events.map(handleEvent)).then((result) =>
