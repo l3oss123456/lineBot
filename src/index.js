@@ -86,9 +86,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", line.middleware(config), (req, res) => {
-  Promise.all(req.body.events.map(handleEvent)).then((result) =>
-    res.json(result)
-  );
+  // Promise.all(req.body.events.map(handleEvent)).then((result) =>
+  //   res.json(result)
+  // );
+  const reply_token = req.body.events[0].replyToken;
+  const msg = {
+    type: "text",
+    text: "สวัสดีนะครับ",
+  };
+  client.replyMessage(event.replyToken, msg);
 });
 
 function handleEvent(event) {
