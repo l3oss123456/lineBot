@@ -22,31 +22,31 @@ app.get('/', (req, res) => {
 // })
 
 app.post("/webhook", (req, res) => {
-  Promise.all(req.body.events.map(handleEvent)).then((result) =>
-    res.json(result)
-  );
+  res.json(req)
+  // Promise.all(req.body.events.map(handleEvent)).then((result) =>
+  //   res.json(result)
+  // );
   // res.json({
   //   message: 'Welcome to Nongbot/webhook'
   // })
 });
 
-function handleEvent(event) {
-  console.log(event);
-  if (event.type === "message" && event.message.type === "text") {
-    handleMessageEvent(event);
-  } else {
-    return Promise.resolve(null);
-  }
-}
+// function handleEvent(event) {
+//   if (event.type === "message" && event.message.type === "text") {
+//     handleMessageEvent(event);
+//   } else {
+//     return Promise.resolve(null);
+//   }
+// }
 
-function handleMessageEvent(event) {
-  var msg = {
-    type: "text",
-    text: "สวัสดีนะครับ",
-  };
+// function handleMessageEvent(event) {
+//   var msg = {
+//     type: "text",
+//     text: "สวัสดีนะครับ",
+//   };
 
-  return client.replyMessage(event.replyToken, msg);
-}
+//   return client.replyMessage(event.replyToken, msg);
+// }
 
 app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`)
