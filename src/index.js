@@ -26,33 +26,33 @@
 // });
 
 // function reply(reply_token) {
-//   let headers = {
-//     "Content-Type": "application/json",
-//     Authorization: `Bearer ${process.env.channelAccessToken}`,
-//   };
-//   let body = JSON.stringify({
-//     replyToken: reply_token,
-//     messages: [
-//       {
-//         type: "text",
-//         text: "Hello",
-//       },
-//       {
-//         type: "text",
-//         text: "How are you?",
-//       },
-//     ],
-//   });
-//   request.post(
-//     {
-//       url: "https://api.line.me/v2/bot/message/reply",
-//       headers: headers,
-//       body: body,
-//     },
-//     (err, res, body) => {
-//       console.log("status = " + res.statusCode);
-//     }
-//   );
+  // let headers = {
+  //   "Content-Type": "application/json",
+  //   Authorization: `Bearer ${process.env.channelAccessToken}`,
+  // };
+  // let body = JSON.stringify({
+  //   replyToken: reply_token,
+  //   messages: [
+  //     {
+  //       type: "text",
+  //       text: "Hello",
+  //     },
+  //     {
+  //       type: "text",
+  //       text: "How are you?",
+  //     },
+  //   ],
+  // });
+  // request.post(
+  //   {
+  //     url: "https://api.line.me/v2/bot/message/reply",
+  //     headers: headers,
+  //     body: body,
+  //   },
+  //   (err, res, body) => {
+  //     console.log("status = " + res.statusCode);
+  //   }
+  // );
 // }
 
 // app.listen(PORT, () => {
@@ -90,8 +90,36 @@ app.get("/", (req, res) => {
 
 app.post("/webhook", (req, res) => {
   let reply_token = req.body.events[0].replyToken;
+  res.send('req: ', req.post)
+  let headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${process.env.channelAccessToken}`,
+  };
+  let body = JSON.stringify({
+    replyToken: reply_token,
+    messages: [
+      {
+        type: "text",
+        text: "Hello",
+      },
+      {
+        type: "text",
+        text: "How are you?",
+      },
+    ],
+  });
+  req.post(
+    {
+      url: "https://api.line.me/v2/bot/message/reply",
+      headers: headers,
+      body: body,
+    },
+    (err, res, body) => {
+      console.log("status = " + res.statusCode);
+    }
+  );
   client.pushMessage(reply_token, message).then(() => {
-    res.send(reply_token)
+    
   }).catch((err) => {
     console.log('err: ', err)
   })
