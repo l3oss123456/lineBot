@@ -68,11 +68,11 @@ require("dotenv/config");
 const app = express();
 // const config = require("./config")
 
-const PORT = 4800;
+const PORT = process.env.PORT || 4000;
 
 const config = {
   channelAccessToken: process.env.channelAccessToken,
-  channelSecret: process.env.channelSecret,
+  // channelSecret: process.env.channelSecret,
 };
 
 const client = new line.Client(config);
@@ -89,22 +89,22 @@ app.get("/", (req, res) => {
 //   );
 // });
 
-function handleEvent(event) {
-  if (event.type === "message" && event.message.type === "text") {
-    handleMessageEvent(event);
-  } else {
-    return Promise.resolve(null);
-  }
-}
+// function handleEvent(event) {
+//   if (event.type === "message" && event.message.type === "text") {
+//     handleMessageEvent(event);
+//   } else {
+//     return Promise.resolve(null);
+//   }
+// }
 
-function handleMessageEvent(event) {
-  var msg = {
-    type: "text",
-    text: "สวัสดีนะครับ",
-  };
+// function handleMessageEvent(event) {
+//   var msg = {
+//     type: "text",
+//     text: "สวัสดีนะครับ",
+//   };
 
-  return client.replyMessage(event.replyToken, msg);
-}
+//   return client.replyMessage(event.replyToken, msg);
+// }
 
 app.listen(PORT, () => {
   console.log(`Server is running on port : ${PORT}`);
