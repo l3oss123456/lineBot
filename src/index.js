@@ -90,12 +90,11 @@ app.get("/", (req, res) => {
 
 app.post("/webhook", (req, res) => {
   let reply_token = req.body.events[0].replyToken;
-  res.send(reply_token)
-  // client.pushMessage(reply_token, message).then(() => {
-
-  // }).catch((err) => {
-  //   console.log('err: ', err)
-  // })
+  client.pushMessage(reply_token, message).then(() => {
+    res.send(reply_token)
+  }).catch((err) => {
+    console.log('err: ', err)
+  })
 });
 
 app.listen(PORT, () => {
