@@ -94,7 +94,7 @@ app.post("/webhook", line.middleware(config), (req, res) => {
     type: "text",
     text: "สวัสดีนะครับ",
   };
-  client.replyMessage(event.replyToken, msg);
+  client.replyMessage(replyToken, msg);
 });
 
 function handleEvent(event) {
