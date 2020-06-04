@@ -1,4 +1,3 @@
-
 // const express = require('express')
 // const app = express()
 
@@ -37,7 +36,9 @@ const config = {
 const client = new line.Client(config);
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.json({
+    message: "OK",
+  });
 });
 
 app.post("/webhook", line.middleware(config), (req, res) => {
