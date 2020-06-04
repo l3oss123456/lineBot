@@ -1,8 +1,13 @@
 const express = require('express')
 const line = require("@line/bot-sdk");
+require("dotenv/config");
 const app = express()
 
 const PORT = process.env.PORT || 4000
+
+const client = new line.Client({
+  channelAccessToken: process.env.channelAccessToken
+});
 
 app.get('/', (req, res) => {
   res.json({
