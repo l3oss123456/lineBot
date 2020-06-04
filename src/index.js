@@ -108,7 +108,7 @@ app.post("/webhook", (req, res) => {
       },
     ],
   });
-  req.post(
+  res.post(
     {
       url: "https://api.line.me/v2/bot/message/reply",
       headers: headers,
