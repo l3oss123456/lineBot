@@ -63,12 +63,15 @@
 
 const express = require("express");
 const line = require("@line/bot-sdk");
+const bodyParser = require('body-parser')
 require("dotenv/config");
 
 const app = express();
 // const config = require("./config")
 
 const PORT = process.env.PORT || 4000;
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 const client = new line.Client({
   channelAccessToken: `${process.env.channelAccessToken}`,
@@ -85,15 +88,15 @@ app.get("/", (req, res) => {
   });
 });
 
-// app.post("/webhook", (req, res) => {
-//   let reply_token = req.body.events[0].replyToken;
-//   res.send(reply_token)
-//   // client.pushMessage(reply_token, message).then(() => {
+app.post("/webhook", (req, res) => {
+  let reply_token = req.body.events[0].replyToken;
+  res.send(reply_token)
+  // client.pushMessage(reply_token, message).then(() => {
 
-//   // }).catch((err) => {
-//   //   console.log('err: ', err)
-//   // })
-// });
+  // }).catch((err) => {
+  //   console.log('err: ', err)
+  // })
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port : ${PORT}`);
