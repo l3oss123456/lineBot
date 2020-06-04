@@ -63,24 +63,19 @@
 
 const express = require("express");
 const line = require("@line/bot-sdk");
-const bodyParser = require('body-parser')
 require("dotenv/config");
 
 const app = express();
 // const config = require("./config")
 
-const PORT = process.env.PORT || 4000;
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+const PORT = 4800;
 
-const client = new line.Client({
-  channelAccessToken: `${process.env.channelAccessToken}`,
-});
-
-const message = {
-  type: "text",
-  text: "Hello World!",
+const config = {
+  channelAccessToken: process.env.channelAccessToken,
+  channelSecret: process.env.channelSecret,
 };
+
+const client = new line.Client(config);
 
 app.get("/", (req, res) => {
   res.json({
@@ -88,97 +83,31 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/webhook", (req, res) => {
-  let reply_token = req.body.events[0].replyToken;
-  res.send('req: ', req.post)
-  let headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${process.env.channelAccessToken}`,
-  };
-  let body = JSON.stringify({
-    replyToken: reply_token,
-    messages: [
-      {
-        type: "text",
-        text: "Hello",
-      },
-      {
-        type: "text",
-        text: "How are you?",
-      },
-    ],
-  });
-  res.post(
-    {
-      url: "https://api.line.me/v2/bot/message/reply",
-      headers: headers,
-      body: body,
-    },
-    (err, res, body) => {
-      console.log("status = " + res.statusCode);
-    }
-  );
-  client.pushMessage(reply_token, message).then(() => {
-    
-  }).catch((err) => {
-    console.log('err: ', err)
-  })
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port : ${PORT}`);
-});
-
-module.exports = app;
-
-// const express = require("express");
-// const line = require("@line/bot-sdk");
-// require("dotenv/config");
-
-// const app = express();
-// // const config = require("./config")
-
-// const PORT = 4800;
-
-// const config = {
-//   channelAccessToken: process.env.channelAccessToken,
-//   channelSecret: process.env.channelSecret,
-// };
-
-// const client = new line.Client(config);
-
-// app.get("/", (req, res) => {
-//   res.json({
-//     message: "Welcome to nongBot",
-//   });
-// });
-
 // app.post("/webhook", line.middleware(config), (req, res) => {
 //   Promise.all(req.body.events.map(handleEvent)).then((result) =>
 //     res.json(result)
 //   );
 // });
 
-// function handleEvent(event) {
-//   console.log(event);
-//   if (event.type === "message" && event.message.type === "text") {
-//     handleMessageEvent(event);
-//   } else {
-//     return Promise.resolve(null);
-//   }
-// }
+function handleEvent(event) {
+  if (event.type === "message" && event.message.type === "text") {
+    handleMessageEvent(event);
+  } else {
+    return Promise.resolve(null);
+  }
+}
 
-// function handleMessageEvent(event) {
-//   var msg = {
-//     type: "text",
-//     text: "สวัสดีนะครับ",
-//   };
+function handleMessageEvent(event) {
+  var msg = {
+    type: "text",
+    text: "สวัสดีนะครับ",
+  };
 
-//   return client.replyMessage(event.replyToken, msg);
-// }
+  return client.replyMessage(event.replyToken, msg);
+}
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port : ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server is running on port : ${PORT}`);
+});
 
-// module.exports = app;
+module.exports = app;
