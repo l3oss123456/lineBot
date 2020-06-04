@@ -25,9 +25,9 @@ app.post("/webhook", (req, res) => {
   Promise.all(req.body.events.map(handleEvent)).then((result) =>
     res.json(result)
   );
-  res.json({
-    message: 'Welcome to Nongbot/webhook'
-  })
+  // res.json({
+  //   message: 'Welcome to Nongbot/webhook'
+  // })
 });
 
 function handleEvent(event) {
