@@ -103,7 +103,7 @@ function handleMessageEvent(event) {
   //   text: "สวัสดีนะครับ",
   // };
   var msg = {
-    type: "text",
+    // type: "text",
     text: event.message.text,
   };
 
