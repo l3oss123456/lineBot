@@ -26,33 +26,33 @@
 // });
 
 // function reply(reply_token) {
-  // let headers = {
-  //   "Content-Type": "application/json",
-  //   Authorization: `Bearer ${process.env.channelAccessToken}`,
-  // };
-  // let body = JSON.stringify({
-  //   replyToken: reply_token,
-  //   messages: [
-  //     {
-  //       type: "text",
-  //       text: "Hello",
-  //     },
-  //     {
-  //       type: "text",
-  //       text: "How are you?",
-  //     },
-  //   ],
-  // });
-  // request.post(
-  //   {
-  //     url: "https://api.line.me/v2/bot/message/reply",
-  //     headers: headers,
-  //     body: body,
-  //   },
-  //   (err, res, body) => {
-  //     console.log("status = " + res.statusCode);
-  //   }
-  // );
+// let headers = {
+//   "Content-Type": "application/json",
+//   Authorization: `Bearer ${process.env.channelAccessToken}`,
+// };
+// let body = JSON.stringify({
+//   replyToken: reply_token,
+//   messages: [
+//     {
+//       type: "text",
+//       text: "Hello",
+//     },
+//     {
+//       type: "text",
+//       text: "How are you?",
+//     },
+//   ],
+// });
+// request.post(
+//   {
+//     url: "https://api.line.me/v2/bot/message/reply",
+//     headers: headers,
+//     body: body,
+//   },
+//   (err, res, body) => {
+//     console.log("status = " + res.statusCode);
+//   }
+// );
 // }
 
 // app.listen(PORT, () => {
@@ -86,15 +86,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", line.middleware(config), (req, res) => {
-  // Promise.all(req.body.events.map(handleEvent)).then((result) =>
-  //   res.json(result)
-  // );
-  const reply_token = req.body.events[0].replyToken;
-  const msg = {
-    type: "text",
-    text: "สวัสดีนะครับ",
-  };
-  client.replyMessage(replyToken, msg);
+  Promise.all(
+    req.body.events.map((event) => {
+      if (event.type === "message" && event.message.type === "text") {
+        handleMessageEvent(event);
+      } else {
+        return Promise.resolve(null);
+      }
+    })
+  ).then((result) => res.json(result));
 });
 
 function handleEvent(event) {
