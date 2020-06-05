@@ -63,7 +63,8 @@
 
 const express = require("express");
 const line = require("@line/bot-sdk");
-const request = require('request')
+const axios = require('axios')
+const CircularJSON = require('circular-json');
 require("dotenv/config");
 
 const app = express();
@@ -80,10 +81,14 @@ const client = new line.Client({
   channelAccessToken: process.env.channelAccessToken,
 });
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome to nongBot",
-  });
+app.get("/", async (req, res) => {
+  // res.json({
+  //   message: "Welcome to nongBot",
+  // });
+  const resp = await axios.get(`http://data.fixer.io/api/latest?access_key=${process.env.fixerApiKey}`)
+  const json =  CircularJSON.stringify(resp);
+  res.send(JSON.parse(json).data.rates)
+  console.log(JSON.parse(json).data.rates.USD.toFixed(2))
 });
 
 app.post("/webhook", line.middleware(config), (req, res) => {
@@ -98,14 +103,21 @@ app.post("/webhook", line.middleware(config), (req, res) => {
   ).then((result) => res.json(result));
 });
 
-function handleMessageEvent(event) {
+async function handleMessageEvent(event) {
+  const resp = await axios.get(`http://data.fixer.io/api/latest?access_key=${process.env.fixerApiKey}`)
+  const json =  CircularJSON.stringify(resp);
   // var msg = {
   //   type: "text",
   //   text: "สวัสดีนะครับ",
   // };
+  const cal = event.message.text * JSON.parse(json).data.rates.USD
+  // var msg = {
+  //   type: "text",
+  //   text: event.message.text,
+  // };
   var msg = {
     type: "text",
-    text: event.message.text,
+    text: cal.toFixed(2),
   };
 
   return client.replyMessage(event.replyToken, msg);
