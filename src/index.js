@@ -85,6 +85,15 @@ app.get("/", async (req, res) => {
   res.json({
     message: "Welcome to nongBot",
   });
+  // const resp = await axios.get(
+  //   `http://data.fixer.io/api/latest?access_key=${process.env.fixerApiKey}`
+  // );
+  // const json = CircularJSON.stringify(resp);
+  // res.send(JSON.parse(json));
+  // const cal =
+  //   (100 / JSON.parse(json).data.rates.USD) *
+  //   parseFloat(JSON.parse(json).data.rates.THB);
+  // console.log("cal: ", cal);
 });
 
 app.post("/webhook", line.middleware(config), async (req, res) => {
@@ -110,8 +119,9 @@ const handleMessageEvent = async (event) => {
   );
   const json = CircularJSON.stringify(resp);
   const cal =
-    parseFloat(event.message.text) *
-    parseFloat(JSON.parse(json).data.rates.USD);
+    (parseFloat(event.message.text) /
+      parseFloat(JSON.parse(json).data.rates.THB)) *
+    parseFloat(JSON.parse(json).data.rates.THB);
   // var msg = {
   //   type: "text",
   //   text: event.message.text,
