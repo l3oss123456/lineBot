@@ -123,7 +123,7 @@ async function handleMessageEvent(event) {
   // };
   var msg = {
     type: "text",
-    text: Number.toString(cal.toFixed(2)),
+    text: cal.toFixed(2),
   };
 
   return client.replyMessage(event.replyToken, msg);
