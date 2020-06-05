@@ -117,14 +117,14 @@ async function handleMessageEvent(event) {
   const cal =
     parseFloat(event.message.text) *
     parseFloat(JSON.parse(json).data.rates.USD);
-  // var msg = {
-  //   type: "text",
-  //   text: event.message.text,
-  // };
   var msg = {
     type: "text",
-    text: cal.toFixed(2),
+    text: event.message.text[2],
   };
+  // var msg = {
+  //   type: "text",
+  //   text: cal.toFixed(2),
+  // };
 
   return client.replyMessage(event.replyToken, msg);
 }
