@@ -82,52 +82,47 @@ const client = new line.Client({
 });
 
 app.get("/", async (req, res) => {
-  // res.json({
-  //   message: "Welcome to nongBot",
-  // });
+  res.json({
+    message: "Welcome to nongBot",
+  });
+});
+
+app.post("/webhook", line.middleware(config), async (req, res) => {
+  await req.body.events.map((event) => {
+    if (event.type === "message" && event.message.type === "text") {
+      handleMessageEvent(event);
+    }
+  });
+  // Promise.all(
+  //   req.body.events.map((event) => {
+  //     if (event.type === "message" && event.message.type === "text") {
+  //       handleMessageEvent(event);
+  //     } else {
+  //       return Promise.resolve(null);
+  //     }
+  //   })
+  // ).then((result) => res.json(result));
+});
+
+const handleMessageEvent = async (event) => {
   const resp = await axios.get(
     `http://data.fixer.io/api/latest?access_key=${process.env.fixerApiKey}`
   );
   const json = CircularJSON.stringify(resp);
-  res.send(JSON.parse(json).data.rates);
-  console.log(typeof parseFloat(JSON.parse(json).data.rates.USD.toFixed(2)));
-});
-
-app.post("/webhook", line.middleware(config), (req, res) => {
-  Promise.all(
-    req.body.events.map((event) => {
-      if (event.type === "message" && event.message.type === "text") {
-        handleMessageEvent(event);
-      } else {
-        return Promise.resolve(null);
-      }
-    })
-  ).then((result) => res.json(result));
-});
-
-async function handleMessageEvent(event) {
-  const resp = await axios.get(
-    `http://data.fixer.io/api/latest?access_key=${process.env.fixerApiKey}`
-  );
-  const json = CircularJSON.stringify(resp);
-  // var msg = {
-  //   type: "text",
-  //   text: "สวัสดีนะครับ",
-  // };
   const cal =
     parseFloat(event.message.text) *
     parseFloat(JSON.parse(json).data.rates.USD);
-  var msg = {
-    type: "text",
-    text: event.message.text[2],
-  };
   // var msg = {
   //   type: "text",
-  //   text: cal.toFixed(2),
+  //   text: event.message.text,
   // };
+  var msg = {
+    type: "text",
+    text: cal.toFixed(2),
+  };
 
   return client.replyMessage(event.replyToken, msg);
-}
+};
 
 app.listen(PORT, () => {
   console.log(`Server is running on port : ${PORT}`);
