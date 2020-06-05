@@ -120,7 +120,7 @@ const handleMessageEvent = async (event) => {
   const json = CircularJSON.stringify(resp);
   const cal =
     (parseFloat(event.message.text) /
-      parseFloat(JSON.parse(json).data.rates.THB)) *
+      parseFloat(JSON.parse(json).data.rates.USD)) *
     parseFloat(JSON.parse(json).data.rates.THB);
   // var msg = {
   //   type: "text",
