@@ -5,9 +5,9 @@ const CircularJSON = require("circular-json");
 require("dotenv/config");
 
 const app = express();
-const config = require("./config")
+const config = require("./config");
 
-const PORT = config.port
+const PORT = config.port;
 
 const client = new line.Client({
   channelAccessToken: process.env.channelAccessToken,
@@ -40,9 +40,15 @@ const handleMessageEvent = async (event) => {
     (parseFloat(event.message.text) /
       parseFloat(JSON.parse(json).data.rates.USD)) *
     parseFloat(JSON.parse(json).data.rates.THB);
+  var txt;
+  if (isNaN(cal)) {
+    txt = "กรุณาใส่ข้อมูลที่เป็นตัวเลข !";
+  } else {
+    txt = cal.toFixed(2) + " บาท";
+  }
   var msg = {
     type: "text",
-    text: cal.toFixed(2),
+    text: txt,
   };
 
   return client.replyMessage(event.replyToken, msg);
